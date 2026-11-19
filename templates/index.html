@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Router Console</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Consolas, "Courier New", monospace;
+        color: #b7ffd9;
+        background: #070d0a;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(ellipse at 90% 0%, #48216b38, transparent 38rem),
+          #070d0a;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 34px auto;
+      }
+
+      .topbar, .section-heading, .result, .empty, .error {
+        border: 1px solid #164d35;
+        border-radius: 4px;
+        background: #09140f;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px 24px;
+        margin-bottom: 28px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: #bc87ff;
+        font-size: .75rem;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: #effff5;
+        font-size: clamp(1.25rem, 3vw, 1.8rem);
+      }
+
+      button {
+        padding: 12px 16px;
+        border: 1px solid #bd8cff;
+        border-radius: 4px;
+        color: #f4eaff;
+        background: #43216a;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #5b2b8a;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 16px;
+        margin-bottom: 14px;
+      }
+
+      .section-heading h2 {
+        margin: 0;
+        color: #31f59b;
+        font-size: .9rem;
+        letter-spacing: .12em;
+      }
+
+      .count {
+        color: #829e8e;
+        font-size: .68rem;
+        letter-spacing: .08em;
+      }
+
+      .result {
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+
+      .command {
+        padding: 12px 16px;
+        border-bottom: 1px solid #164d35;
+        color: #39f89f;
+        background: #0c1a13;
+        font-weight: 700;
+      }
+
+      .command::before {
+        content: "> ";
+        color: #bc87ff;
+      }
+
+      pre {
+        max-height: 340px;
+        overflow: auto;
+        margin: 0;
+        padding: 16px;
+        color: #b7ffd9;
+        font: inherit;
+        font-size: .82rem;
+        line-height: 1.65;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        scrollbar-color: #16c979 #0a130e;
+      }
+
+      .result:last-child pre {
+        max-height: 440px;
+      }
+
+      .empty, .error {
+        padding: 18px;
+        line-height: 1.6;
+      }
+
+      .empty {
+        color: #97b6a4;
+      }
+
+      .error {
+        margin-bottom: 16px;
+        border-color: #7d438e;
+        color: #e4caff;
+      }
+
+      @media (max-width: 600px) {
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+        }
+
+        .section-heading {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">EVE-NG / NETWORK LAB</p>
+          <h1>Router Console</h1>
+        </div>
+        <form method="post">
+          <button type="submit">Run router commands</button>
+        </form>
+      </header>
+
+      {% if error %}
+      <section class="error" role="alert">{{ error }}</section>
+      {% endif %}
+
+      {% if results %}
+      <div class="section-heading">
+        <h2>[ TERMINAL OUTPUT ]</h2>
+        <span class="count">{{ results|length }} COMMAND(S) EXECUTED</span>
+      </div>
+      {% for command, output in results.items() %}
+      <section class="result">
+        <div class="command">{{ command }}</div>
+        <pre>{{ output }}</pre>
+      </section>
+      {% endfor %}
+      {% else %}
+      <section class="empty">
+        Select <strong>Run router commands</strong> to display the router version,
+        interface status, and running configuration here.
+      </section>
+      {% endif %}
+    </main>
+  </body>
+</html>
